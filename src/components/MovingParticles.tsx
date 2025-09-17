@@ -26,7 +26,7 @@ function NepaliParticle({ position, delay }: { position: [number, number, number
 
   return (
     <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[0.03, 12, 12]} />
+      <sphereGeometry args={[0.03, 8, 8]} />
       <meshBasicMaterial 
         color="#DC143C" 
         transparent 
@@ -66,43 +66,46 @@ function GovernanceParticle({ position, delay }: { position: [number, number, nu
   );
 }
 
-// Connecting lines between particles
-function ConnectionLines() {
-  const linesRef = useRef<THREE.Group>(null);
+// Simple floating rings for visual interest
+function FloatingRings() {
+  const groupRef = useRef<THREE.Group>(null);
   
   useFrame((state) => {
-    if (linesRef.current) {
-      linesRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.05;
+    if (groupRef.current) {
+      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.05;
+      groupRef.current.rotation.x = Math.cos(state.clock.elapsedTime * 0.08) * 0.02;
     }
   });
 
-  const connections = useMemo(() => {
-    const lines = [];
-    for (let i = 0; i < 8; i++) {
-      const angle = (i / 8) * Math.PI * 2;
-      const radius = 6;
-      lines.push({
-        start: [Math.cos(angle) * radius, Math.sin(angle) * 3, 0],
-        end: [Math.cos(angle + 0.5) * radius, Math.sin(angle + 0.5) * 3, 0]
+  const rings = useMemo(() => {
+    const temp = [];
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2;
+      const radius = 8;
+      temp.push({
+        position: [
+          Math.cos(angle) * radius,
+          Math.sin(angle) * 3,
+          Math.sin(i * 0.5) * 2
+        ] as [number, number, number],
+        color: i % 2 === 0 ? '#DC143C' : '#003893',
+        scale: 0.5 + Math.random() * 0.5
       });
     }
-    return lines;
+    return temp;
   }, []);
 
   return (
-    <group ref={linesRef}>
-      {connections.map((line, index) => (
-        <line key={index}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              count={2}
-              array={new Float32Array([...line.start, ...line.end])}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial color="#FFFFFF" transparent opacity={0.1} />
-        </line>
+    <group ref={groupRef}>
+      {rings.map((ring, index) => (
+        <mesh key={index} position={ring.position} scale={ring.scale}>
+          <ringGeometry args={[0.1, 0.15, 16]} />
+          <meshBasicMaterial 
+            color={ring.color} 
+            transparent 
+            opacity={0.2}
+          />
+        </mesh>
       ))}
     </group>
   );
@@ -113,11 +116,11 @@ function FloatingParticleSystem() {
   // Generate Nepali red particles (activism theme)
   const nepaliParticles = useMemo(() => {
     const temp = [];
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
       temp.push({
         position: [
-          (Math.random() - 0.5) * 25,
           (Math.random() - 0.5) * 20,
+          (Math.random() - 0.5) * 15,
           (Math.random() - 0.5) * 8,
         ] as [number, number, number],
         delay: Math.random() * 10,
@@ -129,11 +132,11 @@ function FloatingParticleSystem() {
   // Generate blue governance particles
   const governanceParticles = useMemo(() => {
     const temp = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 20; i++) {
       temp.push({
         position: [
-          (Math.random() - 0.5) * 20,
-          (Math.random() - 0.5) * 15,
+          (Math.random() - 0.5) * 18,
+          (Math.random() - 0.5) * 12,
           (Math.random() - 0.5) * 6,
         ] as [number, number, number],
         delay: Math.random() * 10,
@@ -158,7 +161,7 @@ function FloatingParticleSystem() {
           delay={particle.delay}
         />
       ))}
-      <ConnectionLines />
+      <FloatingRings />
     </>
   );
 }
