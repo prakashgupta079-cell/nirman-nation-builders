@@ -2,41 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* NIRMAN-77 Design System - Youth-led Movement for Nepal 
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
+    /* Core Brand Colors */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
+    
+    /* NIRMAN-77 Brand Identity */
+    --crimson: 348 83% 47%; /* #DC143C - Energy, Activism */
+    --deep-blue: 220 100% 29%; /* #003893 - Trust, Governance */
+    --patriot-red: 348 83% 47%;
+    --nepal-blue: 220 100% 29%;
+    
+    /* Design System Colors */
+    --primary: 348 83% 47%; /* Crimson Red */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 348 83% 42%;
+    --primary-light: 348 83% 95%;
+    
+    --secondary: 220 100% 29%; /* Deep Blue */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 220 100% 24%;
+    --secondary-light: 220 100% 95%;
+    
+    /* Neutral Palette */
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
+    
+    /* UI Elements */
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --ring: 348 83% 47%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--crimson)), hsl(var(--deep-blue)));
+    --gradient-patriot: linear-gradient(90deg, hsl(var(--patriot-red)), hsl(var(--nepal-blue)));
+    --gradient-youth: linear-gradient(45deg, hsl(var(--crimson) / 0.9), hsl(var(--deep-blue) / 0.9));
+    --gradient-overlay: linear-gradient(135deg, hsl(var(--crimson) / 0.8), hsl(var(--deep-blue) / 0.8));
+    
+    /* Shadows & Effects */
+    --shadow-activism: 0 10px 40px hsl(var(--crimson) / 0.3);
+    --shadow-governance: 0 10px 40px hsl(var(--deep-blue) / 0.3);
+    --shadow-elevated: 0 20px 60px hsl(0 0% 0% / 0.15);
+    --glow-crimson: 0 0 30px hsl(var(--crimson) / 0.5);
+    --glow-blue: 0 0 30px hsl(var(--deep-blue) / 0.5);
+    
+    /* Animations */
+    --transition-youth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s ease-out;
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +128,133 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground scroll-smooth;
+    font-family: 'Open Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-weight: 700;
+  }
+}
+
+@layer components {
+  /* Hero Button Variants */
+  .btn-activism {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1;
+    box-shadow: var(--shadow-activism);
+  }
+  
+  .btn-governance {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1;
+    box-shadow: var(--shadow-governance);
+  }
+  
+  .btn-outline-activism {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300;
+  }
+  
+  /* Section Backgrounds */
+  .bg-patriot-gradient {
+    background: var(--gradient-patriot);
+  }
+  
+  .bg-youth-gradient {
+    background: var(--gradient-youth);
+  }
+  
+  .bg-hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .bg-overlay-gradient {
+    background: var(--gradient-overlay);
+  }
+  
+  /* Card Variants */
+  .card-activism {
+    @apply bg-primary text-primary-foreground p-6 rounded-xl;
+    box-shadow: var(--shadow-activism);
+    transition: var(--transition-youth);
+  }
+  
+  .card-governance {
+    @apply bg-secondary text-secondary-foreground p-6 rounded-xl;
+    box-shadow: var(--shadow-governance);
+    transition: var(--transition-youth);
+  }
+  
+  .card-hover-activism:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-elevated);
+  }
+  
+  .card-hover-governance:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-elevated);
+  }
+  
+  /* Text Effects */
+  .text-gradient-patriot {
+    background: var(--gradient-patriot);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-glow-crimson {
+    text-shadow: var(--glow-crimson);
+  }
+  
+  .text-glow-blue {
+    text-shadow: var(--glow-blue);
+  }
+  
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+    opacity: 0;
+  }
+}
+
+@layer utilities {
+  .transition-youth {
+    transition: var(--transition-youth);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+  
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
 }
